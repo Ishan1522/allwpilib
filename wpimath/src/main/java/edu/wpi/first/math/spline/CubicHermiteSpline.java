@@ -27,7 +27,9 @@ public class CubicHermiteSpline extends Spline {
       double[] xInitialControlVector,
       double[] xFinalControlVector,
       double[] yInitialControlVector,
-      double[] yFinalControlVector) {
+      double[] yFinalControlVector,
+      double[] zInitialControlVector,
+      double[] zFinalControlVector) {
     super(3);
 
     // Populate the coefficients for the actual spline equations.
@@ -36,15 +38,18 @@ public class CubicHermiteSpline extends Spline {
     final var hermite = makeHermiteBasis();
     final var x = getControlVectorFromArrays(xInitialControlVector, xFinalControlVector);
     final var y = getControlVectorFromArrays(yInitialControlVector, yFinalControlVector);
+    final var z = getControlVectorFromArrays(zInitialControlVector, zFinalControlVector);    
 
     final var xCoeffs = (hermite.mult(x)).transpose();
     final var yCoeffs = (hermite.mult(y)).transpose();
+    final var zCoeffs = (hermite.mult(z)).transpose();
 
     m_coefficients = new SimpleMatrix(6, 4);
 
     for (int i = 0; i < 4; i++) {
       m_coefficients.set(0, i, xCoeffs.get(0, i));
       m_coefficients.set(1, i, yCoeffs.get(0, i));
+      m_coefficients.set(2, i, zCoeffs.get(0, i)); 
 
       // Populate Row 2 and Row 3 with the derivatives of the equations above.
       // Then populate row 4 and 5 with the second derivatives.
@@ -66,8 +71,8 @@ public class CubicHermiteSpline extends Spline {
     }
 
     // Assign member variables.
-    m_initialControlVector = new ControlVector(xInitialControlVector, yInitialControlVector);
-    m_finalControlVector = new ControlVector(xFinalControlVector, yFinalControlVector);
+    m_initialControlVector = new ControlVector(xInitialControlVector, yInitialControlVector, zInitialControlVector);
+    m_finalControlVector = new ControlVector(xFinalControlVector, yFinalControlVector, zFinalControlVector);
   }
 
   /**

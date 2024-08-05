@@ -105,15 +105,18 @@ public abstract class Spline {
     /** The y components of the control vector. */
     public double[] y;
 
+    public double[] z;
+
     /**
      * Instantiates a control vector.
      *
      * @param x The x dimension of the control vector.
      * @param y The y dimension of the control vector.
      */
-    public ControlVector(double[] x, double[] y) {
+    public ControlVector(double[] x, double[] y, double[] z) {
       this.x = Arrays.copyOf(x, x.length);
       this.y = Arrays.copyOf(y, y.length);
+      this.z = Arrays.copyOf(z, z.length);
     }
   }
 }
